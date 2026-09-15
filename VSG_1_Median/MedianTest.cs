@@ -4,9 +4,6 @@ namespace VSG_1_Median;
 
 public class MedianTest
 {
-    // Ages are computed against a fixed date so the expected values do not change over time.
-    private static readonly DateTime ReferenceDate = new(2026, 6, 17);
-
     [Fact]
     public void Median_Should_Return_Correct_Value()
     {
@@ -43,7 +40,10 @@ public class MedianTest
     /// With an even count there is no single middle employee, so the younger of the two middle
     /// employees is returned.
     /// </summary>
-    private static MedianResult CalculateMedian(IEnumerable<Employee> employees, DateTime referenceDate)
+    private static MedianResult CalculateMedian(
+        IEnumerable<Employee> employees,
+        DateTime referenceDate
+    )
     {
         var ordered = employees
             .Where(e => e.Birthday != null)
@@ -79,6 +79,8 @@ public class MedianTest
     private record MedianResult(double MedianAge, MedianEmployee Employee);
 
     private record MedianEmployee(string Name, DateTime Birthday, int Age);
+
+    private static readonly DateTime ReferenceDate = new(2026, 6, 17);
 
     private static readonly List<Employee> Employees =
     [
