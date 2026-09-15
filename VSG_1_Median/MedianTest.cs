@@ -11,9 +11,39 @@ public class MedianTest
         // and return the age, birthday and the name of the median employee
         // example for a median; [100,5,3,8,999] => 8
 
-        var median = -1; // TODO implement this
+        var employeesOrdered = Employees
+            .Where(e => e.Birthday != null)
+            .OrderBy(e => e.Birthday)
+            .ToList();
 
-        Assert.Equal(52, median);
+        var cnt = employeesOrdered.Count;
+        var middle = employeesOrdered.Count / 2;
+
+        var median =
+            cnt % 2 == 0
+                ? (
+                    GetAge(employeesOrdered[middle].Birthday)
+                    + GetAge(employeesOrdered[middle + 1].Birthday)
+                ) / 2.0
+                : GetAge(employeesOrdered[middle].Birthday);
+
+        if (cnt % 2 == 0)
+        {
+            Console.WriteLine(
+                $"Two {employeesOrdered[middle].Rep} {employeesOrdered[middle + 1].Rep}"
+            );
+        }
+        else
+        {
+            Console.WriteLine($"{employeesOrdered[middle].Rep}");
+        }
+
+        Assert.Equal(52, (int)median);
+    }
+
+    private static double GetAge(DateTime? birthday)
+    {
+        return (ReferenceDate - birthday).Value.TotalDays / 365;
     }
 
     private static readonly DateTime ReferenceDate = new(2026, 6, 17);
@@ -197,7 +227,11 @@ public class MedianTest
         string LastName,
         DateTime? Birthday,
         List<Color> FavoriteColors
-    );
+    )
+    {
+        public string Rep =>
+            $"{FirstName}, {LastName},  {GetAge(Birthday.Value)} years, {Birthday}";
+    }
 
     private record Color(string Value);
 }
